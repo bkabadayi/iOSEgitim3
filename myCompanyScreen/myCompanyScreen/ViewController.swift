@@ -7,48 +7,52 @@
 
 import UIKit
 import Toast
-class ViewController: UIViewController {
+class ViewController: UIViewController, SecondViewControllerDelegate {
+    
     //Buttons
     @IBOutlet weak var paySalaryButton: UIButton!
     @IBOutlet weak var addIncomeButton: UIButton!
     @IBOutlet weak var addOutcomeButton: UIButton!
+    @IBOutlet weak var addWorkerButton: UIButton!
     //Labels
     @IBOutlet weak var compNameLabel: UILabel!
     @IBOutlet weak var numberOfWorkerLabel: UILabel!
     @IBOutlet weak var companyBudgetLabel: UILabel!
-    //Text Fields
-    @IBOutlet weak var enterNameTF: UITextField!
-    @IBOutlet weak var enterAgeTF: UITextField!
-    @IBOutlet weak var enterJobPositionTF: UITextField!
-    //Add Worker Button
-    @IBOutlet weak var addWorkerButton: UIButton!
+    //TextFields
     @IBOutlet weak var enterpriceTF: UITextField!
     
-    var budget = 1000000
+    var budget = 0
     var totalSalary = 0
-    let hakan = Assistant()
-    let berkin = Assistant()
-    let kaan = Director()
     let myCompany = CompanyP()
+    let ahmet = Director()
+    let berkin = Assistant()
+    let baris = Assistant()
+    let kaan = Director()
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        hakan.age = 20
-        hakan.name = "Hakan"
-                
-        berkin.age = 25
+        ahmet.name = "Ahmet"
+        ahmet.age = 28
+        
         berkin.name = "Berkin"
-                
-        kaan.age = 30
+        berkin.age = 25
+        
+        baris.name = "Barış"
+        baris.age = 22
+        
         kaan.name = "Kaan"
-                
-        myCompany.workers = [hakan, berkin, kaan]
-                
+        kaan.age = 28
+        
+        myCompany.workers.append(ahmet)
+        myCompany.workers.append(berkin)
+        myCompany.workers.append(baris)
+        myCompany.workers.append(kaan)
+        
         // paySalary button view change
         paySalaryButton.layer.cornerRadius = 10
         paySalaryButton.layer.masksToBounds = true
-                
+        
         // addIncome button view change
         addIncomeButton.layer.cornerRadius = 10
         addIncomeButton.layer.masksToBounds = true
@@ -68,24 +72,6 @@ class ViewController: UIViewController {
         // companyBudgetLabel view change
         companyBudgetLabel.layer.cornerRadius = 10
         companyBudgetLabel.layer.masksToBounds = true
-        
-        // enterName text field view change
-        enterNameTF.layer.borderColor = UIColor.blue.cgColor
-        enterNameTF.layer.borderWidth = 1
-        enterNameTF.layer.cornerRadius = 10
-        enterNameTF.layer.masksToBounds = true
-        
-        // enterAge text field view change
-        enterAgeTF.layer.borderColor = UIColor.blue.cgColor
-        enterAgeTF.layer.borderWidth = 1
-        enterAgeTF.layer.cornerRadius = 10
-        enterAgeTF.layer.masksToBounds = true
-        
-        // enterJobPosition text field view change
-        enterJobPositionTF.layer.borderColor = UIColor.blue.cgColor
-        enterJobPositionTF.layer.borderWidth = 1
-        enterJobPositionTF.layer.cornerRadius = 10
-        enterJobPositionTF.layer.masksToBounds = true
         
         // addNewWorker button view change
         addWorkerButton.layer.cornerRadius = 10
@@ -112,84 +98,27 @@ class ViewController: UIViewController {
     }
     
     @IBAction func addOutcomeButtonTouched(_ sender: Any) {
-        if let outcome = Int(enterpriceTF.text ?? "") {
+        if let outcome = Int(enterpriceTF.text ?? "")  {
             budget -= outcome
             companyBudgetLabel.text = "Budget: " + String(budget)
             self.view.makeToast("Outcome is added", duration: 2.0, position: .center)
         }
     }
     
-    @IBAction func enterNameTFFilled(_ sender: Any) {
-    }
-    
-    @IBAction func enterAgeTFFilled(_ sender: Any) {
-    }
-    
-    @IBAction func enterJobPositionTFFilled(_ sender: Any) {
-    }
-    
     @IBAction func addWorkerButtonPressed(_ sender: Any) {
-        if enterNameTF.text != "" && enterAgeTF.text != "" && enterJobPositionTF.text != "" {
-            if enterJobPositionTF.text == "Director"{
-                let newEmployee = Director()
-                newEmployee.age = Int(enterAgeTF.text ?? "0") ?? 0
-                newEmployee.name = enterNameTF.text ?? ""
-                myCompany.workers.append(newEmployee)
-                numberOfWorkerLabel.text = "Number of workers:" + String(myCompany.workers.count)
-                self.view.makeToast("New worker is added!", duration: 2.0, position: .center)
-            }
-            else if enterJobPositionTF.text == "Assistant"{
-            let newEmployee = Assistant()
-            newEmployee.age = Int(enterAgeTF.text ?? "0") ?? 0
-            newEmployee.name = enterNameTF.text ?? ""
-            numberOfWorkerLabel.text = "Number of workers:" + String(myCompany.workers.count)
-            myCompany.workers.append(newEmployee)
-            self.view.makeToast("New worker is added!", duration: 2.0, position: .center)
-            }
-            else{
-            self.view.makeToast("Please fill correct!", duration: 2.5, position: .center)
-            }
-        }
-        else{
-        self.view.makeToast("Please fill all fields!", duration: 2.5, position: .center)
-        }
+        let storyboard = UIStoryboard(name: "Main", bundle: nil)
+        let secondVC = storyboard.instantiateViewController(identifier: "SecondViewController") as! SecondViewController
+        secondVC.delegate = self
+        self.navigationController?.pushViewController(secondVC, animated: true)
     }
     
     @IBAction func enterpriceTFFilled(_ sender: Any) {
     }
-}
-
-// SALARY CALCULATIONS
-class CompanyP {
-    var workers: [EmployeeP] = []
-}
-
-protocol CostProtocol {
-    func getCost() -> Int
-}
-
-class EmployeeP: CostProtocol {
-    var age: Int = 0
-    var name: String = ""
-    var cost: Int = 0
-    func getCost() -> Int{
-        return 10000
-    }
-}
-
-class Assistant: EmployeeP {
-    override func getCost() -> Int {
-        return super.getCost() + age * 100
-    }
-}
-
-class Director: EmployeeP {
-    override func getCost() -> Int {
-        return super.getCost() + age * 200
-    }
-}
-
-
-
     
-
+    
+    // SecondViewControllerDelegate
+    func appendNewEmployee(newEmployee: EmployeeP) {
+        myCompany.workers.append(newEmployee)
+        numberOfWorkerLabel.text = "Number of worker: \(myCompany.workers.count)"
+    }
+}
