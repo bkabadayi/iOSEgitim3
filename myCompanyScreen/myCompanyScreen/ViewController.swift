@@ -20,34 +20,12 @@ class ViewController: UIViewController, SecondViewControllerDelegate {
     @IBOutlet weak var companyBudgetLabel: UILabel!
     //TextFields
     @IBOutlet weak var enterpriceTF: UITextField!
-    
-    var budget = 0
-    var totalSalary = 0
-    let myCompany = CompanyP()
-    let ahmet = Director()
-    let berkin = Assistant()
-    let baris = Assistant()
-    let kaan = Director()
+
+    let company1 = CompanyBuilder()
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        ahmet.name = "Ahmet"
-        ahmet.age = 28
-        
-        berkin.name = "Berkin"
-        berkin.age = 25
-        
-        baris.name = "Barış"
-        baris.age = 22
-        
-        kaan.name = "Kaan"
-        kaan.age = 28
-        
-        myCompany.workers.append(ahmet)
-        myCompany.workers.append(berkin)
-        myCompany.workers.append(baris)
-        myCompany.workers.append(kaan)
         
         // paySalary button view change
         paySalaryButton.layer.cornerRadius = 10
@@ -68,6 +46,7 @@ class ViewController: UIViewController, SecondViewControllerDelegate {
         // numberOfWorkerLabel view change
         numberOfWorkerLabel.layer.cornerRadius = 10
         numberOfWorkerLabel.layer.masksToBounds = true
+        numberOfWorkerLabel.text = "Number of workers:" + String(company1.getCompanyNew().countWorkers())
         
         // companyBudgetLabel view change
         companyBudgetLabel.layer.cornerRadius = 10
@@ -81,35 +60,30 @@ class ViewController: UIViewController, SecondViewControllerDelegate {
     }
     
     @IBAction func paySalaryButtonTouched(_ sender: Any) {
-        for item in myCompany.workers {
-            totalSalary += item.getCost()
+            company1.getCompanyNew().paySalaries()
         }
-        budget -= totalSalary
-        totalSalary = 0
-        companyBudgetLabel.text = String("Budget:") + String(budget) //Interpolation
-    }
     
     @IBAction func addIncomeButtonTouched(_ sender: Any) {
         if let income = Int(enterpriceTF.text ?? "") {
-            budget += income
-            companyBudgetLabel.text = "Budget: " + String(budget)
-            self.view.makeToast("Income is added", duration: 2.0, position: .center)
+            company1.getCompanyNew().increaseBudget(income: income)
+            companyBudgetLabel.text = "budget : $" + String(company1.getCompanyNew().getBudget())
+            self.view.makeToast("Outcome is added", duration: 2.0, position: .center)
         }
     }
     
     @IBAction func addOutcomeButtonTouched(_ sender: Any) {
         if let outcome = Int(enterpriceTF.text ?? "")  {
-            budget -= outcome
-            companyBudgetLabel.text = "Budget: " + String(budget)
+            company1.getCompanyNew().increaseBudget(income: outcome)
+            companyBudgetLabel.text = "Budget : " + String(company1.getCompanyNew().getBudget())
             self.view.makeToast("Outcome is added", duration: 2.0, position: .center)
         }
     }
     
     @IBAction func addWorkerButtonPressed(_ sender: Any) {
         let storyboard = UIStoryboard(name: "Main", bundle: nil)
-        let secondVC = storyboard.instantiateViewController(identifier: "SecondViewController") as! SecondViewController
-        secondVC.delegate = self
-        self.navigationController?.pushViewController(secondVC, animated: true)
+        let secondViewController = storyboard.instantiateViewController(identifier: "SecondViewController") as! SecondViewController
+        secondViewController.delegate = self
+        self.navigationController?.pushViewController(secondViewController, animated: true)
     }
     
     @IBAction func enterpriceTFFilled(_ sender: Any) {
@@ -118,7 +92,7 @@ class ViewController: UIViewController, SecondViewControllerDelegate {
     
     // SecondViewControllerDelegate
     func appendNewEmployee(newEmployee: EmployeeP) {
-        myCompany.workers.append(newEmployee)
-        numberOfWorkerLabel.text = "Number of worker: \(myCompany.workers.count)"
+        company1.getCompanyNew().addNewEmployee(newEmployee: newEmployee)
+        numberOfWorkerLabel.text = "# of employees: " + String(company1.getCompanyNew().countWorkers())
     }
 }
