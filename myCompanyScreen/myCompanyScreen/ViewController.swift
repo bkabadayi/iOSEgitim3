@@ -26,7 +26,6 @@ class ViewController: UIViewController, SecondViewControllerDelegate {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        
         // paySalary button view change
         paySalaryButton.layer.cornerRadius = 10
         paySalaryButton.layer.masksToBounds = true
@@ -55,12 +54,11 @@ class ViewController: UIViewController, SecondViewControllerDelegate {
         // addNewWorker button view change
         addWorkerButton.layer.cornerRadius = 10
         addWorkerButton.layer.masksToBounds = true
-        addWorkerButton.layer.borderColor = UIColor.blue.cgColor
-        addWorkerButton.layer.borderWidth = 1
     }
     
     @IBAction func paySalaryButtonTouched(_ sender: Any) {
             company1.getCompanyNew().paySalaries()
+            companyBudgetLabel.text = "Budget :" + String (company1.getCompanyNew().getBudget())
         }
     
     @IBAction func addIncomeButtonTouched(_ sender: Any) {
@@ -93,6 +91,6 @@ class ViewController: UIViewController, SecondViewControllerDelegate {
     // SecondViewControllerDelegate
     func appendNewEmployee(newEmployee: EmployeeP) {
         company1.getCompanyNew().addNewEmployee(newEmployee: newEmployee)
-        numberOfWorkerLabel.text = "# of employees: " + String(company1.getCompanyNew().countWorkers())
+        numberOfWorkerLabel.text = "Number of workers: " + String(company1.getCompanyNew().countWorkers())
     }
 }

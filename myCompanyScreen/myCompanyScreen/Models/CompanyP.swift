@@ -6,6 +6,7 @@
 //
 
 class CompanyP {
+    
     private var workers: [EmployeeP] = []
     private var totalSalary: Int = 0
     private var budget: Int = 1000000
