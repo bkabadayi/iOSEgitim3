@@ -7,20 +7,22 @@
 
 import UIKit
 import Toast
-class ViewController: UIViewController, SecondViewControllerDelegate {
+
+class HomeVC: UIViewController, AddWorkerVCDelegate, WorkerListDelegate {
     
     //Buttons
     @IBOutlet weak var paySalaryButton: UIButton!
     @IBOutlet weak var addIncomeButton: UIButton!
     @IBOutlet weak var addOutcomeButton: UIButton!
     @IBOutlet weak var addWorkerButton: UIButton!
+    @IBOutlet weak var workerListButton: UIButton!
     //Labels
     @IBOutlet weak var compNameLabel: UILabel!
     @IBOutlet weak var numberOfWorkerLabel: UILabel!
     @IBOutlet weak var companyBudgetLabel: UILabel!
     //TextFields
     @IBOutlet weak var enterpriceTF: UITextField!
-
+    
     let company1 = CompanyBuilder()
     
     override func viewDidLoad() {
@@ -54,6 +56,10 @@ class ViewController: UIViewController, SecondViewControllerDelegate {
         // addNewWorker button view change
         addWorkerButton.layer.cornerRadius = 10
         addWorkerButton.layer.masksToBounds = true
+        
+        //workerList button view change
+        workerListButton.layer.cornerRadius = 10
+        workerListButton.layer.masksToBounds = true
     }
     
     @IBAction func paySalaryButtonTouched(_ sender: Any) {
@@ -64,14 +70,14 @@ class ViewController: UIViewController, SecondViewControllerDelegate {
     @IBAction func addIncomeButtonTouched(_ sender: Any) {
         if let income = Int(enterpriceTF.text ?? "") {
             company1.getCompanyNew().increaseBudget(income: income)
-            companyBudgetLabel.text = "budget : $" + String(company1.getCompanyNew().getBudget())
+            companyBudgetLabel.text = "Budget :" + String (company1.getCompanyNew().getBudget())
             self.view.makeToast("Outcome is added", duration: 2.0, position: .center)
         }
     }
     
     @IBAction func addOutcomeButtonTouched(_ sender: Any) {
         if let outcome = Int(enterpriceTF.text ?? "")  {
-            company1.getCompanyNew().increaseBudget(income: outcome)
+            company1.getCompanyNew().decreaseBudget(outcome : outcome)
             companyBudgetLabel.text = "Budget : " + String(company1.getCompanyNew().getBudget())
             self.view.makeToast("Outcome is added", duration: 2.0, position: .center)
         }
@@ -79,18 +85,33 @@ class ViewController: UIViewController, SecondViewControllerDelegate {
     
     @IBAction func addWorkerButtonPressed(_ sender: Any) {
         let storyboard = UIStoryboard(name: "Main", bundle: nil)
-        let secondViewController = storyboard.instantiateViewController(identifier: "SecondViewController") as! SecondViewController
-        secondViewController.delegate = self
-        self.navigationController?.pushViewController(secondViewController, animated: true)
+        let addWorkerVC = storyboard.instantiateViewController(identifier: "AddWorkerVC") as! AddWorkerVC
+        addWorkerVC.delegate = self
+        self.navigationController?.pushViewController(addWorkerVC, animated: true)
     }
+    
+    @IBAction func workerListButtonPressed(_ sender: Any) {
+        let storyboard = UIStoryboard(name: "Main", bundle: nil)
+        let workerListVC = storyboard.instantiateViewController(identifier: "WorkerListVC") as! WorkerListVC
+        workerListVC.delegate = self
+        self.navigationController?.pushViewController(workerListVC, animated: true)
+    }
+    
     
     @IBAction func enterpriceTFFilled(_ sender: Any) {
     }
-    
     
     // SecondViewControllerDelegate
     func appendNewEmployee(newEmployee: EmployeeP) {
         company1.getCompanyNew().addNewEmployee(newEmployee: newEmployee)
         numberOfWorkerLabel.text = "Number of workers: " + String(company1.getCompanyNew().countWorkers())
+    }
+    
+    func getWorkerCount() -> Int {
+        return company1.getCompanyNew().countWorkers()
+    }
+    
+    func getWorkerList() -> [EmployeeP] {
+        return company1.getCompanyNew().getWorkerArray()
     }
 }

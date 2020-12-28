@@ -44,4 +44,8 @@ class CompanyP {
     func paySalaries() {
         decreaseBudget(outcome: getTotalSalary())
     }
+
+    func getWorkerArray() -> [EmployeeP] {
+        return workers
+    }
 }

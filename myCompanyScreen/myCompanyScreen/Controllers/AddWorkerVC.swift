@@ -7,11 +7,11 @@
 
 import UIKit
 
-protocol SecondViewControllerDelegate: class {
+protocol AddWorkerVCDelegate: class {
     func appendNewEmployee(newEmployee: EmployeeP)
 }
 
-class SecondViewController: UIViewController {
+class AddWorkerVC: UIViewController {
     //Add Fields
     @IBOutlet weak var enterNameTF: UITextField!
     @IBOutlet weak var enterAgeTF: UITextField!
@@ -19,7 +19,7 @@ class SecondViewController: UIViewController {
     //Add Worker Button
     @IBOutlet weak var addWorkerButton2: UIButton!
     
-    weak var delegate: SecondViewControllerDelegate?
+    weak var delegate : AddWorkerVCDelegate?
     
     override func viewDidLoad() {
         super.viewDidLoad()
