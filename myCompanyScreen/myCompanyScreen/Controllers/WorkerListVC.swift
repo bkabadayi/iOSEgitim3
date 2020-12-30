@@ -7,18 +7,13 @@
 
 import UIKit
 
-protocol WorkerListDelegate: class {
-    func getWorkerCount() -> Int
-    func getWorkerList() -> [EmployeeP]
-}
-
 final class WorkerListVC: UIViewController {
+    
+    var workers: [EmployeeP] = []
     
     @IBOutlet weak var workerInfoLabel: UILabel!
     @IBOutlet weak var tableViewInfoLabel: UILabel!
     @IBOutlet weak var tableView: UITableView!
-    
-    weak var delegate: WorkerListDelegate?
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -65,12 +60,12 @@ extension WorkerListVC: UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return (self.delegate?.getWorkerCount() ?? 0) // ?? 0 a neden gerek var
+        return workers.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "TableViewWorkerList") as! TableViewWorkerList
-        cell.setCell(newWorker: (self.delegate?.getWorkerList()[indexPath.row])!)
+        cell.setCell(newWorker: workers[indexPath.row])
         return cell
     }
 }
@@ -82,12 +77,3 @@ extension WorkerListVC: UITableViewDelegate {
         return UITableView.automaticDimension
     }
 }
-
-//extension WorkerListVC: TableViewWorkerListDelegate {
-//    func goWorkerDetail(worker: EmployeeP) {
-//        let storyboard = UIStoryboard(name: "Main", bundle: nil)
-//        let vc = storyboard.instantiateViewController(identifier: "WorkerDetailVC") as! WorkerDetailVC
-//        vc.worker = worker
-//        self.navigationController?.pushViewController(vc, animated: true)
-//    }
-//}

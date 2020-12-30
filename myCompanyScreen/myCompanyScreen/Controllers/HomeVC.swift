@@ -8,7 +8,7 @@
 import UIKit
 import Toast
 
-class HomeVC: UIViewController, AddWorkerVCDelegate, WorkerListDelegate {
+class HomeVC: UIViewController, AddWorkerVCDelegate {
     
     //Buttons
     @IBOutlet weak var paySalaryButton: UIButton!
@@ -93,7 +93,8 @@ class HomeVC: UIViewController, AddWorkerVCDelegate, WorkerListDelegate {
     @IBAction func workerListButtonPressed(_ sender: Any) {
         let storyboard = UIStoryboard(name: "Main", bundle: nil)
         let workerListVC = storyboard.instantiateViewController(identifier: "WorkerListVC") as! WorkerListVC
-        workerListVC.delegate = self
+//        workerListVC.delegate = self
+        workerListVC.workers =  company1.getCompanyNew().getWorkerArray()
         self.navigationController?.pushViewController(workerListVC, animated: true)
     }
     
@@ -107,11 +108,11 @@ class HomeVC: UIViewController, AddWorkerVCDelegate, WorkerListDelegate {
         numberOfWorkerLabel.text = "Number of workers: " + String(company1.getCompanyNew().countWorkers())
     }
     
-    func getWorkerCount() -> Int {
-        return company1.getCompanyNew().countWorkers()
-    }
-    
-    func getWorkerList() -> [EmployeeP] {
-        return company1.getCompanyNew().getWorkerArray()
-    }
+//    func getWorkerCount() -> Int {
+//        return company1.getCompanyNew().countWorkers()
+//    }
+//    
+//    func getWorkerList() -> [EmployeeP] {
+//        return company1.getCompanyNew().getWorkerArray()
+//    }
 }
