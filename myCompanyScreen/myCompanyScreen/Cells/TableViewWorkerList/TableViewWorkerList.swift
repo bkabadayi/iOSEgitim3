@@ -16,6 +16,7 @@ class TableViewWorkerList: UITableViewCell {
     @IBOutlet weak var cellLabel: UILabel!
     
     @IBOutlet weak var cellView: TableViewWorkerList!
+    
 //    @IBOutlet weak var goDetailsButton: UIButton!
     
 //    weak var delegate: TableViewWorkerListDelegate?
@@ -24,7 +25,6 @@ class TableViewWorkerList: UITableViewCell {
     override func awakeFromNib() {
         super.awakeFromNib()
         prepareLayer(object: cellLabel as Any)
-        //cellView.backgroundColor = .lightGray
     }
 
     override func setSelected(_ selected: Bool, animated: Bool) {

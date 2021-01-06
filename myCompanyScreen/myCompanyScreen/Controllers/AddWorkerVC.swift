@@ -20,6 +20,8 @@ class AddWorkerVC: UIViewController {
     @IBOutlet weak var addWorkerButton2: UIButton!
     
     weak var delegate : AddWorkerVCDelegate?
+    let jobPosition = ["Assistant","Director"]
+    var pickerViewJobPosition = UIPickerView()
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -47,6 +49,11 @@ class AddWorkerVC: UIViewController {
         addWorkerButton2.layer.masksToBounds = true
         addWorkerButton2.layer.borderColor = UIColor.blue.cgColor
         addWorkerButton2.layer.borderWidth = 1
+        
+        // pickerView prepare
+        pickerViewJobPosition.delegate = self
+        pickerViewJobPosition.dataSource = self
+        enterJobPositionTF.inputView = pickerViewJobPosition
     }
     
     @IBAction func enterNameTFFilled(_ sender: Any) {
@@ -88,3 +95,20 @@ class AddWorkerVC: UIViewController {
     }
 }
 
+extension AddWorkerVC : UIPickerViewDelegate, UIPickerViewDataSource {
+    func numberOfComponents(in pickerView: UIPickerView) -> Int {
+        return 1
+    }
+    
+    func pickerView(_ pickerView: UIPickerView, numberOfRowsInComponent component: Int) -> Int {
+        return jobPosition.count
+    }
+    
+    func pickerView(_ pickerView: UIPickerView, titleForRow row: Int, forComponent component: Int) -> String? {
+        return jobPosition[row]
+    }
+    
+    func pickerView(_ pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
+        enterJobPositionTF.text = jobPosition[row]
+    }
+}

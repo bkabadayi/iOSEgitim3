@@ -63,9 +63,9 @@ class HomeVC: UIViewController, AddWorkerVCDelegate {
     }
     
     @IBAction func paySalaryButtonTouched(_ sender: Any) {
-            company1.getCompanyNew().paySalaries()
-            companyBudgetLabel.text = "Budget :" + String (company1.getCompanyNew().getBudget())
-        }
+        company1.getCompanyNew().paySalaries()
+        companyBudgetLabel.text = "Budget :" + String (company1.getCompanyNew().getBudget())
+    }
     
     @IBAction func addIncomeButtonTouched(_ sender: Any) {
         if let income = Int(enterpriceTF.text ?? "") {
@@ -93,7 +93,6 @@ class HomeVC: UIViewController, AddWorkerVCDelegate {
     @IBAction func workerListButtonPressed(_ sender: Any) {
         let storyboard = UIStoryboard(name: "Main", bundle: nil)
         let workerListVC = storyboard.instantiateViewController(identifier: "WorkerListVC") as! WorkerListVC
-//        workerListVC.delegate = self
         workerListVC.workers =  company1.getCompanyNew().getWorkerArray()
         self.navigationController?.pushViewController(workerListVC, animated: true)
     }
@@ -107,12 +106,4 @@ class HomeVC: UIViewController, AddWorkerVCDelegate {
         company1.getCompanyNew().addNewEmployee(newEmployee: newEmployee)
         numberOfWorkerLabel.text = "Number of workers: " + String(company1.getCompanyNew().countWorkers())
     }
-    
-//    func getWorkerCount() -> Int {
-//        return company1.getCompanyNew().countWorkers()
-//    }
-//    
-//    func getWorkerList() -> [EmployeeP] {
-//        return company1.getCompanyNew().getWorkerArray()
-//    }
 }
